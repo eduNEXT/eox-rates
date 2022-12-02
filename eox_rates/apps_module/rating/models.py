@@ -11,12 +11,12 @@ class EoxRates(models.Model):
     Model to persist rating for a course.
     """
     rate = models.PositiveIntegerField(default=0, validators=[MinValueValidator(1), MaxValueValidator(5)])
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     course = models.ForeignKey(get_course_overview(), on_delete=models.CASCADE, related_name='course', null=True)
     comment = models.TextField()
 
     class Meta:
         constraints = [
-            CheckConstraint(check=Q(rate__range=(0, 5)), name='valid_rate'),
-            UniqueConstraint(fields=['user'], name='rating_once')
+            models.CheckConstraint(check=Q(rate__range=(0, 5)), name='valid_rate'),
+            models.UniqueConstraint(fields=["user", "rate"], name="unique_course_user_rating")
         ]

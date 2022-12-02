@@ -6,11 +6,11 @@ from django.contrib.auth.models import User
 from eox_rates.edxapp_wrapper.course_module import get_course_overview
 
 
-class EoxRates(models.Model):
+class EoxRates(TimeStampedModel):
     """
     Model to persist rating for a course.
     """
-    rate = models.FloatField(validators=[MinValueValidator(0.0), MaxValueValidator(5.0)])
+    rate = models.PositiveIntegerField(default=0, validators=[MinValueValidator(1), MaxValueValidator(5)])
     story = models.ForeignKey(Story, on_delete=models.CASCADE)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     course = models.ForeignKey(get_course_overview(), on_delete=models.CASCADE, related_name='course', null=True)
@@ -18,6 +18,6 @@ class EoxRates(models.Model):
 
     class Meta:
         constraints = [
-            CheckConstraint(check=Q(rate__range=(0, 10)), name='valid_rate'),
+            CheckConstraint(check=Q(rate__range=(0, 5)), name='valid_rate'),
             UniqueConstraint(fields=['user', 'story'], name='rating_once')
         ]

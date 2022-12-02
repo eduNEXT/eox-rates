@@ -39,4 +39,5 @@ def plugin_settings(settings):
     Set of plugin settings used by the Open Edx platform.
     More info: https://github.com/edx/edx-platform/blob/master/openedx/core/djangoapps/plugins/README.rst
     """
-    pass
+     # Backends Settings
+    settings.PCO_COURSE_BACKEND = 'eox_rates.edxapp_wrapper.backends.course_module_n_v1'
